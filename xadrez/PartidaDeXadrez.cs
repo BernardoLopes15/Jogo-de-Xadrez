@@ -6,15 +6,15 @@ namespace xadrez
 	class PartidaDeXadrez
 	{
 		public Tabuleiro Tab { get; private set; }
-		private int _turno;
-		private Cor _jogadorAtual;
+		public int Turno { get; private set; }
+		public Cor JogadorAtual { get; private set; }
 		public bool Terminada { get; private set; }
 
 		public PartidaDeXadrez()
 		{
 			Tab = new Tabuleiro(8, 8);
-			_turno = 1;
-			_jogadorAtual = Cor.Branca;
+			Turno = 1;
+			JogadorAtual = Cor.Branca;
 			Terminada = false;
 			ColocarPecas();
 		}
@@ -25,6 +25,49 @@ namespace xadrez
 			p.IncrementarQMovimentos();
 			Peca pecaCap = Tab.RetirarPeca(Destino);
 			Tab.ColocarPeca(p, Destino);
+		}
+
+		public void RealizaJogada(Posicao origem, Posicao destino)
+		{
+			ExecutaMovimento(origem, destino);
+			Turno++;
+			MudaJogador();
+		}
+
+		public void ValidarPosicaoOrigem(Posicao pos)
+		{
+			if(Tab.Peca(pos) == null)
+			{
+				throw new TabuleiroException("Não existe peça na posição de origem escolhida");
+			}
+			if(JogadorAtual != Tab.Peca(pos).Cor)
+			{
+				throw new TabuleiroException("O turno é da peça " + JogadorAtual);
+			}
+			if(!Tab.Peca(pos).ExisteMovimentosPossiveis())
+			{
+				throw new TabuleiroException("A peça está bloqueada");
+			}
+		}
+
+		public void ValidarPosicaoDestino(Posicao origem, Posicao Destino)
+		{
+			if (!Tab.Peca(origem).PodeMoverPara(Destino))
+			{
+				throw new TabuleiroException("Posicao de destino invalida");
+			}
+		}
+
+		private void MudaJogador()
+		{
+			if(JogadorAtual == Cor.Preta)
+			{
+				JogadorAtual = Cor.Branca;
+			}
+			else
+			{
+				JogadorAtual = Cor.Preta;
+			}
 		}
 
 		private void ColocarPecas()
