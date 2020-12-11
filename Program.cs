@@ -17,10 +17,7 @@ namespace Xadrez
 					try
 					{
 						Console.Clear();
-						Tela.ImprimirTela(partidaDeXadrez.Tab);
-						Console.WriteLine();
-						Console.WriteLine("Turno: " + partidaDeXadrez.Turno);
-						Console.WriteLine("Aguardando a jogada da " + partidaDeXadrez.JogadorAtual);
+						Tela.ImprimirPartida(partidaDeXadrez);
 
 						Console.WriteLine();
 						Console.Write("Origem: ");
@@ -30,7 +27,7 @@ namespace Xadrez
 						bool[,] pm = partidaDeXadrez.Tab.Peca(origem).MovimentosPossiveis();
 
 						Console.Clear();
-						Tela.ImprimirTel(partidaDeXadrez.Tab, pm);
+						Tela.ImprimirTel(partidaDeXadrez.JogadorAtual, partidaDeXadrez.Tab, pm);
 
 						Console.WriteLine();
 						Console.Write("Destino: ");
