@@ -13,6 +13,18 @@ namespace xadrez
 			Console.WriteLine();
 			Console.WriteLine("Turno: " + partida.Turno);
 			Console.WriteLine("Aguardando a jogada da " + partida.JogadorAtual);
+			if (partida.Xeque)
+			{
+				ConsoleColor FundoNormal = Console.BackgroundColor;
+				ConsoleColor LetraNormal = Console.ForegroundColor;
+				ConsoleColor FundoBranco = ConsoleColor.White;
+				ConsoleColor LetraPreta = ConsoleColor.Black;
+				Console.BackgroundColor = FundoBranco;
+				Console.ForegroundColor = LetraPreta;
+				Console.WriteLine("XEQUE!!!!!!!!!!");
+				Console.BackgroundColor = FundoNormal;
+				Console.ForegroundColor = LetraNormal;
+			}
 			ImprimirPecasCap(partida);
 		}
 

@@ -12,7 +12,7 @@ namespace Xadrez
 			{
 				PartidaDeXadrez partidaDeXadrez = new PartidaDeXadrez();
 
-				while(!partidaDeXadrez.Terminada)
+				while (!partidaDeXadrez.Terminada)
 				{
 					try
 					{
@@ -36,14 +36,23 @@ namespace Xadrez
 
 						partidaDeXadrez.RealizaJogada(origem, destino);
 					}
-					catch(TabuleiroException e)
+					catch (TabuleiroException e)
 					{
 						Console.WriteLine(e.Message);
+						Console.ReadLine();
+					}
+					catch (IndexOutOfRangeException e)
+					{
+						Console.WriteLine("O formato está incorreto");
 						Console.ReadLine();
 					}
 				}
 			}
 			catch (TabuleiroException e)
+			{
+				Console.WriteLine(e.Message);
+			}
+			catch (Exception e)
 			{
 				Console.WriteLine(e.Message);
 			}
