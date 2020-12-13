@@ -46,6 +46,8 @@ namespace Xadrez
 						Console.WriteLine("O formato está incorreto");
 						Console.ReadLine();
 					}
+					Console.Clear();
+					Tela.ImprimirPartida(partidaDeXadrez);
 				}
 			}
 			catch (TabuleiroException e)

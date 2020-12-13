@@ -12,20 +12,28 @@ namespace xadrez
 			ImprimirTela(partida.Tab);
 			Console.WriteLine();
 			Console.WriteLine("Turno: " + partida.Turno);
-			Console.WriteLine("Aguardando a jogada da " + partida.JogadorAtual);
-			if (partida.Xeque)
+			if (!partida.Terminada)
 			{
-				ConsoleColor FundoNormal = Console.BackgroundColor;
-				ConsoleColor LetraNormal = Console.ForegroundColor;
-				ConsoleColor FundoBranco = ConsoleColor.White;
-				ConsoleColor LetraPreta = ConsoleColor.Black;
-				Console.BackgroundColor = FundoBranco;
-				Console.ForegroundColor = LetraPreta;
-				Console.WriteLine("XEQUE!!!!!!!!!!");
-				Console.BackgroundColor = FundoNormal;
-				Console.ForegroundColor = LetraNormal;
+				Console.WriteLine("Aguardando a jogada da " + partida.JogadorAtual);
+				if (partida.Xeque)
+				{
+					ConsoleColor FundoNormal = Console.BackgroundColor;
+					ConsoleColor LetraNormal = Console.ForegroundColor;
+					ConsoleColor FundoBranco = ConsoleColor.White;
+					ConsoleColor LetraPreta = ConsoleColor.Black;
+					Console.BackgroundColor = FundoBranco;
+					Console.ForegroundColor = LetraPreta;
+					Console.WriteLine("XEQUE!!!!!!!!!!");
+					Console.BackgroundColor = FundoNormal;
+					Console.ForegroundColor = LetraNormal;
+				}
+				ImprimirPecasCap(partida);
 			}
-			ImprimirPecasCap(partida);
+			else
+			{
+				Console.WriteLine("XEQUEMATE!!");
+				Console.WriteLine("VENCEDOR: " + partida.JogadorAtual);
+			}
 		}
 
 		public static void ImprimirPecasCap(PartidaDeXadrez partida)
@@ -35,7 +43,7 @@ namespace xadrez
 			ImprimirConjunto(partida.PecasCap(Cor.Branca));
 			Console.WriteLine();
 			ConsoleColor aux = Console.ForegroundColor;
-			Console.ForegroundColor = ConsoleColor.Red;
+			Console.ForegroundColor = ConsoleColor.DarkGreen;
 			Console.Write("Pretas: ");
 			ImprimirConjunto(partida.PecasCap(Cor.Preta));
 			Console.ForegroundColor = aux;
@@ -56,7 +64,39 @@ namespace xadrez
 				Console.Write(8 - i + " ");
 				for (int j = 0; j < tab.Colunas; j++)
 				{
-					ImprimirPeca(tab.Pea(i, j));
+					ConsoleColor FundoOriginal = Console.BackgroundColor;
+					ConsoleColor FundoDasBrancas = ConsoleColor.DarkBlue;
+
+					if (i % 2 == 0)
+					{
+						if (j % 2 == 0)
+						{
+							Console.BackgroundColor = FundoDasBrancas;
+							ImprimirPeca(tab.Pea(i, j));
+							Console.BackgroundColor = FundoOriginal;
+						}
+						else
+						{
+							ImprimirPeca(tab.Pea(i, j));
+							Console.BackgroundColor = FundoDasBrancas;
+							Console.BackgroundColor = FundoOriginal;
+						}
+					}
+					else
+					{
+						if (j % 2 != 0)
+						{
+							Console.BackgroundColor = FundoDasBrancas;
+							ImprimirPeca(tab.Pea(i, j));
+							Console.BackgroundColor = FundoOriginal;
+						}
+						else
+						{
+							ImprimirPeca(tab.Pea(i, j));
+							Console.BackgroundColor = FundoDasBrancas;
+							Console.BackgroundColor = FundoOriginal;
+						}
+					}
 				}
 				Console.WriteLine();
 			}
@@ -66,8 +106,9 @@ namespace xadrez
 		public static void ImprimirTel(Cor jogadorAtual,Tabuleiro tab, bool[,] pm)
 		{
 			ConsoleColor FundoOriginal = Console.BackgroundColor;
+			ConsoleColor FundoDs = ConsoleColor.DarkBlue;
 			ConsoleColor FundoDasBrancas = ConsoleColor.White;
-			ConsoleColor FundoDasPretas = ConsoleColor.Red;
+			ConsoleColor FundoDasPretas = ConsoleColor.DarkGreen;
 
 			for (int i = 0; i < tab.Linhas; i++)
 			{
@@ -77,16 +118,48 @@ namespace xadrez
 					if (pm[i, j] == true && jogadorAtual == Cor.Branca)
 					{
 						Console.BackgroundColor = FundoDasBrancas;
+						ImprimirPeca(tab.Pea(i, j));
 					}
-					else if(pm[i, j] == true && jogadorAtual == Cor.Preta)
+					else if (pm[i, j] == true && jogadorAtual == Cor.Preta)
 					{
 						Console.BackgroundColor = FundoDasPretas;
+						ImprimirPeca(tab.Pea(i, j));
+					}
+					else if (pm[i, j] == false && i % 2 == 0)
+					{
+						if (j % 2 == 0)
+						{
+							Console.BackgroundColor = FundoDs;
+							ImprimirPeca(tab.Pea(i, j));
+							Console.BackgroundColor = FundoOriginal;
+						}
+						else
+						{
+							ImprimirPeca(tab.Pea(i, j));
+							Console.BackgroundColor = FundoDs;
+							Console.BackgroundColor = FundoOriginal;
+						}
+					}
+					else if (pm[i, j] == false && i % 2 != 0)
+					{
+						if (j % 2 != 0)
+						{
+							Console.BackgroundColor = FundoDs;
+							ImprimirPeca(tab.Pea(i, j));
+							Console.BackgroundColor = FundoOriginal;
+						}
+						else
+						{
+							ImprimirPeca(tab.Pea(i, j));
+							Console.BackgroundColor = FundoDs;
+							Console.BackgroundColor = FundoOriginal;
+						}
 					}
 					else
 					{
+						ImprimirPeca(tab.Pea(i, j));
 						Console.BackgroundColor = FundoOriginal;
 					}
-					ImprimirPeca(tab.Pea(i, j));
 					Console.BackgroundColor = FundoOriginal;
 				}
 				Console.WriteLine();
@@ -118,7 +191,7 @@ namespace xadrez
 				else
 				{
 					ConsoleColor aux = Console.ForegroundColor;
-					Console.ForegroundColor = ConsoleColor.Red;
+					Console.ForegroundColor = ConsoleColor.DarkGreen;
 					Console.Write(peca);
 					Console.ForegroundColor = aux;
 				}
