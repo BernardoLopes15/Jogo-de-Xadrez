@@ -43,7 +43,7 @@ namespace Xadrez
 					}
 					catch (IndexOutOfRangeException e)
 					{
-						Console.WriteLine("O formato está incorreto");
+						Console.WriteLine(e.Message);
 						Console.ReadLine();
 					}
 					Console.Clear();
