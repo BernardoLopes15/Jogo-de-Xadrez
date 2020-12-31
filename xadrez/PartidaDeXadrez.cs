@@ -14,6 +14,7 @@ namespace xadrez
 		private HashSet<Peca> PecasCapturadas;
 		public bool Xeque { get; private set; }
 		public Peca VulEnPassant { get; private set; }
+		public bool Promocao { get; private set; }
 
 		public PartidaDeXadrez()
 		{
@@ -23,6 +24,7 @@ namespace xadrez
 			Terminada = false;
 			Xeque = false;
 			VulEnPassant = null;
+			Promocao = false;
 			Pecas = new HashSet<Peca>();
 			PecasCapturadas = new HashSet<Peca>();
 			ColocarPecas();
@@ -61,7 +63,7 @@ namespace xadrez
 
 
 			// #JogadaEspecial En Passant
-			if(p is Peao)
+			if (p is Peao)
 			{
 				if (origem.Coluna != destino.Coluna && pecaCap == null)
 				{
@@ -115,9 +117,9 @@ namespace xadrez
 			}
 
 			// #JogadaEspecial En Passant
-			if(p is Peao)
+			if (p is Peao)
 			{
-				if(origem.Coluna != destino.Coluna && cap == VulEnPassant)
+				if (origem.Coluna != destino.Coluna && cap == VulEnPassant)
 				{
 					Peca peao = Tab.RetirarPeca(destino);
 					Posicao posP;
@@ -144,6 +146,23 @@ namespace xadrez
 				throw new TabuleiroException("Voce não pode se colocar em xeque!");
 			}
 
+			Peca p = Tab.Peca(destino);
+
+			// #JogadaEspecial Promocao
+
+			if (p is Peao)
+			{
+				if ((p.Cor == Cor.Branca && destino.Linha == 0) || (p.Cor == Cor.Preta && destino.Linha == 7))
+				{
+					Promocao = true;
+					p = Tab.RetirarPeca(destino);
+					Pecas.Remove(p);
+					Peca dama = new Dama(p.Cor, Tab);
+					Tab.ColocarPeca(dama, destino);
+					Pecas.Add(dama);
+				}
+			}
+
 			if (EstaXeque(Adversaria(JogadorAtual)))
 			{
 				Xeque = true;
@@ -163,10 +182,8 @@ namespace xadrez
 				MudaJogador();
 			}
 
-			Peca p = Tab.Peca(destino);
-
 			// #JogadaEspecial En Passant
-			if(p is Peao && (destino.Linha == origem.Linha + 2 || destino.Linha == origem.Linha - 2))
+			if (p is Peao && (destino.Linha == origem.Linha + 2 || destino.Linha == origem.Linha - 2))
 			{
 				VulEnPassant = p;
 			}
@@ -288,7 +305,7 @@ namespace xadrez
 			{
 				return false;
 			}
-			
+
 			foreach (Peca x in PecasEmJogo(cor))
 			{
 				bool[,] mat = x.MovimentosPossiveis();
