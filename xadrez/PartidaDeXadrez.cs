@@ -14,7 +14,7 @@ namespace xadrez
 		private HashSet<Peca> PecasCapturadas;
 		public bool Xeque { get; private set; }
 		public Peca VulEnPassant { get; private set; }
-		public bool Promocao { get; private set; }
+		public bool Promocao;
 
 		public PartidaDeXadrez()
 		{
@@ -136,6 +136,34 @@ namespace xadrez
 			}
 		}
 
+		public void PromocaoJog(Cor cor, string c, Posicao destino)
+		{
+			if (c == "d" || c == "D")
+			{
+				Peca peca = new Dama(Adversaria(cor), Tab);
+				Tab.ColocarPeca(peca, destino);
+				Pecas.Add(peca);
+			}
+			else if (c == "t" || c == "T")
+			{
+				Peca peca = new Torre(Adversaria(cor), Tab);
+				Tab.ColocarPeca(peca, destino);
+				Pecas.Add(peca);
+			}
+			else if (c == "b" || c == "B")
+			{
+				Peca peca = new Bispo(Adversaria(cor), Tab);
+				Tab.ColocarPeca(peca, destino);
+				Pecas.Add(peca);
+			}
+			else if (c == "c" || c == "C")
+			{
+				Peca peca = new Cavalo(Adversaria(cor), Tab);
+				Tab.ColocarPeca(peca, destino);
+				Pecas.Add(peca);
+			}
+		}
+
 		public void RealizaJogada(Posicao origem, Posicao destino)
 		{
 			Peca pecaCap = ExecutaMovimento(origem, destino);
@@ -157,9 +185,6 @@ namespace xadrez
 					Promocao = true;
 					p = Tab.RetirarPeca(destino);
 					Pecas.Remove(p);
-					Peca dama = new Dama(p.Cor, Tab);
-					Tab.ColocarPeca(dama, destino);
-					Pecas.Add(dama);
 				}
 			}
 
@@ -358,7 +383,7 @@ namespace xadrez
 			ColocarNovaPeca('h', 2, new Peao(Cor.Branca, Tab, this));
 
 			ColocarNovaPeca('a', 8, new Torre(Cor.Preta, Tab));
-			ColocarNovaPeca('h', 8, new Torre(Cor.Preta, Tab));
+			//ColocarNovaPeca('h', 8, new Torre(Cor.Preta, Tab));
 			ColocarNovaPeca('b', 8, new Cavalo(Cor.Preta, Tab));
 			ColocarNovaPeca('g', 8, new Cavalo(Cor.Preta, Tab));
 			ColocarNovaPeca('c', 8, new Bispo(Cor.Preta, Tab));
@@ -373,7 +398,8 @@ namespace xadrez
 			ColocarNovaPeca('e', 7, new Peao(Cor.Preta, Tab, this));
 			ColocarNovaPeca('f', 7, new Peao(Cor.Preta, Tab, this));
 			ColocarNovaPeca('g', 7, new Peao(Cor.Preta, Tab, this));
-			ColocarNovaPeca('h', 7, new Peao(Cor.Preta, Tab, this));
+			//Colocar preta depois abaixo
+			ColocarNovaPeca('h', 7, new Peao(Cor.Branca, Tab, this));
 
 		}
 	}

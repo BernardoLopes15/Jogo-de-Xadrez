@@ -35,6 +35,13 @@ namespace Xadrez
 						partidaDeXadrez.ValidarPosicaoDestino(origem, destino);
 
 						partidaDeXadrez.RealizaJogada(origem, destino);
+						if (partidaDeXadrez.Promocao)
+						{
+							Console.WriteLine("Escolha entre as peças: D, T, B, C");
+							string c = Console.ReadLine();
+							partidaDeXadrez.PromocaoJog(partidaDeXadrez.JogadorAtual, c, destino);
+							partidaDeXadrez.Promocao = false;
+						}
 					}
 					catch (TabuleiroException e)
 					{
